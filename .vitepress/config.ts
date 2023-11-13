@@ -2,8 +2,15 @@ import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: "Stric",
-  description: "Fast, simple, scalable",
+  title: 'Stric',
+  titleTemplate: ':title - Fast, scalable framework for building web APIs',
+  head: [
+    ['link', {
+      rel: 'icon', href: '/logo.svg'
+    }
+    ]
+  ],
+  description: "Fast, simple, scalable apps",
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
@@ -13,10 +20,15 @@ export default defineConfig({
     socialLinks: [
       { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
     ],
+    logo: '/logo.svg',
     sidebar: [
       {
         text: 'Intro',
         link: '/docs/intro'
+      },
+      {
+        text: 'Performance',
+        link: '/docs/performance'
       },
       {
         text: 'Basics',
