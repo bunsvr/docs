@@ -1,13 +1,11 @@
 # App
 The component for creating web apps and APIs.
 
-## Install
 Install the package with Bun package manager.
 ```bash
 bun i @stricjs/app
 ```
 
-## Usage
 An entry point file is needed to register routes from directories.
 
 To set specific directories to register:
@@ -19,6 +17,8 @@ init({
     routes: ['./src']
 });
 ```
+
+## Routing
 
 To register routes, create files in the `src` directories
 that have extension `.routes.ts`.
@@ -35,19 +35,66 @@ export function main() {
 
 To set a base path for all routes, pass another argument into `routes()`.
 ```ts
-// Handle `/api` instead of `/`
 routes('/api')
+    // Handle `/api` instead of `/`
     .get('/', () => new Response('Hi'));
 ```
 
-There are shorthands for sending responses like text and JSON.
+### Route patterns
+Route patterns like parameters and wildcards are supported.
 ```ts
-import { text, json } from '@stricjs/app';
-
-routes('/api')
-    .get('/', () => text('Hi'))
-    .post('/json', () => json({ message: 'Hello' }));
+routes()
+    // URL parameters
+    .get('/id/:id', c => new Response(c.params.id))
+    // Wildcards
+    .get('/*', () => new Response('No handler found!'));
 ```
 
+## Shorthands
+
+There are methods for sending responses like text and JSON.
+```ts
+import * as send from '@stricjs/app/send';
+
+routes('/api')
+    // Normal text
+    .get('/', () => send.text('Hi'))
+    // JSON response
+    .post('/json', () => send.json({ message: 'Hello' }));
+```
+
+To send headers only, use the `head` shorthand:
+```ts
+import * as send from '@stricjs/app/send';
+
+routes()
+    // Send CORS headers
+    .options('/*', () => send.head({  
+        headers: {
+            'Access-Control-Allow-Methods': 'GET,POST',
+            'Access-Control-Allow-Origin': 'http://example.com'
+        }
+    }));
+```
+
+Use the `file` shorthand to send a file by path:
+```ts
+import * as send from '@stricjs/app/send';
+
+routes()
+    // Send robots.txt
+    .get('/robots.txt', () => send.file('./robots.txt'));
+```
+
+To redirect to another URL, use `to`:
+```ts
+import * as send from '@stricjs/app/send';
+
+routes()
+    // Redirect to another URL
+    .get('/not/found', () => send.to('/', 308));
+```
+
+## Request methods
 Different request methods are supported. See all supported methods [here](https://github.com/bunsvr/app/blob/main/src/utils/methods.ts).
 
