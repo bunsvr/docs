@@ -98,3 +98,4 @@ routes()
 ## Request methods
 Different request methods are supported. See all supported methods [here](https://github.com/bunsvr/app/blob/main/src/utils/methods.ts).
 
+We will need utilities to build things faster though, so let's continue.

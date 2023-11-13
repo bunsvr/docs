@@ -3,7 +3,7 @@
 layout: home
 
 hero:
-  name: "Stric"
+  name: "Stric - Fast, scalable framework for building web APIs"
   text: "Fast, simple, scalable apps"
   tagline: "A Bun-first framework for building web APIs"
   image: "/code.jpeg"

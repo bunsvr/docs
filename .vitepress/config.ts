@@ -3,12 +3,11 @@ import { defineConfig } from 'vitepress'
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: 'Stric',
-  titleTemplate: ':title - Fast, scalable framework for building web APIs',
+  titleTemplate: ':title',
   head: [
     ['link', {
       rel: 'icon', href: '/logo.svg'
-    }
-    ]
+    }]
   ],
   description: "Fast, simple, scalable apps",
   themeConfig: {
