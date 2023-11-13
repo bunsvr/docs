@@ -30,5 +30,5 @@ export default defineConfig({
       }
     ]
   },
-  ignoreDeadLinks: true
+  ignoreDeadLinks: 'localhostLinks'
 })
