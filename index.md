@@ -2,8 +2,10 @@
 # https://vitepress.dev/reference/default-theme-home-page
 layout: home
 
+title: Stric - Fast, scalable framework for building web APIs
+
 hero:
-  name: "Stric - Fast, scalable framework for building web APIs"
+  name: "Stric"
   text: "Fast, simple, scalable apps"
   tagline: "A Bun-first framework for building web APIs"
   image: "/code.jpeg"
