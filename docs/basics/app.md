@@ -65,8 +65,6 @@ routes('/api')
 
 To send headers only, use the `head` shorthand:
 ```ts
-import * as send from '@stricjs/app/send';
-
 routes()
     // Send CORS headers
     .options('/*', () => send.head({  
@@ -79,20 +77,25 @@ routes()
 
 Use the `file` shorthand to send a file by path:
 ```ts
-import * as send from '@stricjs/app/send';
-
 routes()
     // Send robots.txt
     .get('/robots.txt', () => send.file('./robots.txt'));
 ```
 
-To redirect to another URL, use `to`:
+To redirect to another URL, use `redirect`:
 ```ts
-import * as send from '@stricjs/app/send';
-
 routes()
     // Redirect to another URL
-    .get('/not/found', () => send.to('/', 308));
+    .get('/not/found', () => send.redirect('/', 308));
+```
+
+If the redirect URL does not depend on the request you can use `createLink`.
+```ts
+const redirect = send.createLink('/', 308);
+
+routes()
+    // Redirect to '/'
+    .get('/not/found', () => redirect());
 ```
 
 ## Request methods
