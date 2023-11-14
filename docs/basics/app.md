@@ -98,6 +98,11 @@ routes()
     .get('/not/found', () => redirect());
 ```
 
+To send only the status code, use the `status` shorthand.
+```ts
+routes().get('/not/found', () => send.status(404));
+```
+
 ## Request methods
 Different request methods are supported. See all supported methods [here](https://github.com/bunsvr/app/blob/main/src/utils/methods.ts).
 
