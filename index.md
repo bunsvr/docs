@@ -2,7 +2,7 @@
 # https://vitepress.dev/reference/default-theme-home-page
 layout: home
 
-title: Stric - A fast, scalable solution for building web APIs
+title: A fast, scalable solution for building web APIs
 
 hero:
   name: "Stric"

@@ -3,13 +3,13 @@ import { defineConfig } from 'vitepress'
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: 'Stric',
-  titleTemplate: ':title',
+  titleTemplate: 'Stric - :title',
   head: [
     ['link', {
       rel: 'icon', href: '/logo.svg'
     }]
   ],
-  description: "Build fast, simple, scalable apps",
+  description: "Build high-performance, scalable web apps",
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
