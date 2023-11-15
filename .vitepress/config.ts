@@ -9,11 +9,11 @@ export default defineConfig({
       rel: 'icon', href: '/logo.svg'
     }]
   ],
-  description: "Fast, simple, scalable apps",
+  description: "Build fast, simple, scalable apps",
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
-      { text: 'Docs', link: '/docs/getting-started' },
+      { text: 'Docs', link: '/docs/intro' },
       { text: 'Examples', link: '//github.com/bunsvr/examples' }
     ],
     socialLinks: [
