@@ -63,6 +63,7 @@ routes('/api')
     .post('/json', () => send.json({ message: 'Hello' }));
 ```
 
+### Send only response options
 To send headers only, use the `head` shorthand:
 ```ts
 routes()
@@ -75,6 +76,7 @@ routes()
     }));
 ```
 
+### Send file
 Use the `file` shorthand to send a file by path:
 ```ts
 routes()
@@ -82,6 +84,7 @@ routes()
     .get('/robots.txt', () => send.file('./robots.txt'));
 ```
 
+### Redirection
 To redirect to another URL, use `redirect`:
 ```ts
 routes()
@@ -98,9 +101,132 @@ routes()
     .get('/not/found', () => redirect());
 ```
 
+### Send context
+Stric provides a field in the context `ctx.set` to pass
+and modify the response data through middlewares.
+
+All route register methods accept more than 1 handler. If any handler 
+returns `null` the chain will end and runs the fallback handler.
+```ts
+routes().guard(
+    c => {
+        // Return null to end the chain and call the fallback
+    },
+    c => {
+
+    }
+).reject(c => {
+    // Return a response
+});
+```
+
+The property `c.set` extends the `ResponseInit` object with another property `ctx.set.body` for the response body.
+By default `c.set` is `null`, to initialize it use `send.createContext`.
+```ts
+c.set = send.createContext();
+
+// Set some fields like headers and status
+c.set.headers['Content-Type'] = 'text/html';
+
+// Defaults to 200
+c.set.status = 400;
+
+// Set a response body
+c.set.body = '<p>Hi</p>';
+```
+
+To send all info in the context, use `send.ctx`.
+```ts
+routes()
+    // Note that c.set must be initialized before calling send.ctx
+    .get('/', c => {
+        c.set.body = 'Hi';
+        return send.ctx(c);
+    });
+```
+
+Or you can initialize the context yourself, which is 
+often faster than `send.createContext`.
+```
+c.set = { body: 'Hi', status: 418 };
+```
+
+#### Explanation
+The reason why this is faster is that the time it takes 
+to initialize a new property is equivalent to the time you 
+create an empty object.
+
+In this case, the JS engine knows that `c.set` has property
+`body` and `status` so it can perform hidden class optimization
+for creating objects with the same structure.
+
+The `send.createContext` method calls a constructor under the hood 
+and the constructor prototype has already initialized necessary properties
+for engine optimization.
+
+### Send status code
 To send only the status code, use the `status` shorthand.
 ```ts
 routes().get('/not/found', () => send.status(404));
+```
+
+### Streaming
+You can do streaming through a direct `ReadableStream`.
+```ts
+import * as stream from '@stricjs/app/stream';
+
+routes()
+    // Stream some content
+    .get('/file', () => stream.source({
+        type: 'direct',
+        pull: c => { 
+            /** Do something with the controller */ 
+        } 
+    }));
+```
+
+For SSE, use `stream.events`.
+```ts
+const sse = stream.events(
+    // This function reruns until 
+    // the request signal is aborted. 
+    // You can access the request 
+    // context with the second argument
+    async res => {
+        res.write('event: message\n');
+        res.write('data: Hi\n');
+            
+        await Bun.sleep(3000);
+    }
+);
+
+routes()
+    // Stream events
+    .get('/events', sse.stream());
+```
+
+The method `sse.stream()` builds and returns a request handler.
+To attach an abort handler, use `sse.abort`.
+```ts
+sse.abort((res, ctx) => {
+    // This will run after the request is aborted
+});
+```
+
+For handling underlying `ReadableStream` cancel event, use `sse.cancel`.
+```ts
+sse.cancel((res, ctx) => {
+    // This runs when an error occured
+});
+```
+
+Note that you can chain methods like this:
+```ts
+stream
+    .events(() => { /* ... */ })
+    .abort(() => { /* ... */ })
+    .cancel(() => { /* ... */ })
+    .stream();
 ```
 
 ## Request methods
