@@ -107,18 +107,26 @@ and modify the response data through middlewares.
 
 All route register methods accept more than 1 handler. If any handler 
 returns `null` the chain will end and runs the fallback handler.
-```ts
-routes().guard(
-    c => {
-        // Return null to end the chain and call the fallback
-    },
-    c => {
 
-    }
-).reject(c => {
-    // Return a response
-});
+```ts
+routes()
+    .guard(
+        c => {
+            // Return null to end the chain and call the fallback
+        }, c => {
+            // Do sth here
+        }
+    )
+    .reject(c => {
+        // Return a response
+    });
 ```
+
+The `guard` method is used to prepend more handlers to registered routes.
+
+The `reject` method set a fallback handler.
+
+Note that `guard` and `reject` should be registered before any other route.
 
 The property `c.set` extends the `ResponseInit` object with another property `ctx.set.body` for the response body.
 By default `c.set` is `null`, to initialize it use `send.createContext`.
