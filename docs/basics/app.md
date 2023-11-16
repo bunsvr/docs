@@ -155,7 +155,7 @@ routes()
 
 Or you can initialize the context yourself, which is 
 often faster than `send.createContext`.
-```
+```ts
 c.set = { body: 'Hi', status: 418 };
 ```
 
