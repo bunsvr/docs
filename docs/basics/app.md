@@ -266,7 +266,7 @@ export default config.guard('/prefix',
 
 ## WebSocket
 To use WebSocket, you need to enable it in the entry point.
-```
+```ts
 init({
     routes: [/* Some routes directories... */],
     ws: true 
