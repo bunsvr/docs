@@ -240,4 +240,65 @@ stream
 ## Request methods
 Different request methods are supported. See all supported methods [here](https://github.com/bunsvr/app/blob/main/src/utils/methods.ts).
 
+## Base configurations
+You can prefix all routes in a directory with a configuration file.
+
+Create a file named `base.ts` in the directory you want to change.
+```ts
+// Prefix all routes inside the directory and subdirectories
+export const prefix = '/api';
+```
+
+You can add guards for all routes in the directory as well.
+```ts
+import { config } from '@stricjs/app';
+
+export default config.guard('/prefix', 
+    () => {
+        // Guard 
+    },
+    () => {
+        // Another guard
+    },
+    // Add more guards...
+);
+```
+
+## WebSocket
+To use WebSocket, you need to enable it in the entry point.
+```
+init({
+    routes: [/* Some routes directories... */],
+    ws: true 
+});
+```
+
+To create a WebSocket route, you need to create using `ws.route`
+and bind to the current application.
+```ts
+import { ws, routes, type App } from '@stricjs/app';
+
+// A WebSocket route
+const ping = ws.route({
+    // Add event handlers
+    message: (ws, message) => {
+        if (message === 'Ping') ws.send('Pong');
+    }
+});
+
+// Add another argument to the main function
+export function main(app: App) {
+    // Bind the route to the app
+    app.ws(ping);
+
+    // Now you can use it with routes
+    return routes('/ws')
+        .get('/ping', c => ping.upgrade(c));
+}
+
+// You can add another argument for data and headers
+// but for data you need to type it correctly by using
+// a type argument with ws.route
+```
+
 We will need utilities to build things faster though, so let's continue.
