@@ -1,4 +1,5 @@
-import { defineConfig } from 'vitepress'
+import { defineConfig } from 'vitepress';
+import { SearchPlugin } from 'vitepress-plugin-search';
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -9,6 +10,7 @@ export default defineConfig({
       rel: 'icon', href: '/logo.svg'
     }]
   ],
+  vite: { plugins: [SearchPlugin()] },
   description: "Build high-performance, scalable web apps",
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config

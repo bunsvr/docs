@@ -10,9 +10,12 @@
     "typescript": "^5.0.0"
   },
   "scripts": {
-    "docs:dev": "vitepress dev .",
+    "dev": "vitepress dev .",
     "docs:build": "vitepress build",
     "docs:preview": "vitepress preview"
   },
-  "dependencies": { "vue3-embed-gist": "^1.0.0" }
+  "dependencies": {
+    "flexsearch": "^0.7.31",
+    "vitepress-plugin-search": "^1.0.4-alpha.20"
+  }
 }
