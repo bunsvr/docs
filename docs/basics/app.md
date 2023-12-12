@@ -19,9 +19,7 @@ init({
 ```
 
 ## Routing
-
-To register routes, create files in the `src` directories
-that have extension `.routes.ts`.
+To register routes, create files in the `src` directories with extension `.routes.ts`.
 
 ```ts
 import { routes } from '@stricjs/app';
@@ -37,6 +35,15 @@ To set a base path for all routes, pass another argument into `routes()`.
 ```ts
 routes('/api')
     // Handle `/api` instead of `/`
+    .get('/', () => new Response('Hi'));
+```
+
+A main function should be used only when you need access to the current `App` object.
+
+To simplify things, you can export the routes directly from `1.0.0-rc.2`.
+```
+// Export as default
+export default routes()
     .get('/', () => new Response('Hi'));
 ```
 
@@ -273,32 +280,25 @@ init({
 });
 ```
 
-To create a WebSocket route, you need to create using `ws.route`
-and bind to the current application.
+To create a WebSocket route, create another file with extension `.ws.ts`.
 ```ts
-import { ws, routes, type App } from '@stricjs/app';
+import { ws } from '@stricjs/app';
 
-// A WebSocket route
-const ping = ws.route({
-    // Add event handlers
-    message: (ws, message) => {
-        if (message === 'Ping') ws.send('Pong');
+// All exported WebSocket routes be automatically registered
+export default ws.route<{ id: string }>({
+    message(ws, msg) {
+        if (msg === 'Ping')
+            ws.send(ws.data.id);
     }
 });
+```
 
-// Add another argument to the main function
-export function main(app: App) {
-    // Bind the route to the app
-    app.ws(ping);
+Then you can use it in your routes file.
+```
+import ping from './ping.ws';
 
-    // Now you can use it with routes
-    return routes('/ws')
-        .get('/ping', c => ping.upgrade(c));
-}
-
-// You can add another argument for data and headers
-// but for data you need to type it correctly by using
-// a type argument with ws.route
+export default routes()
+    .get('/ws', c => ping.upgrade(c));
 ```
 
 We will need utilities to build things faster though, so let's continue.

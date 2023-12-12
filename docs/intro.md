@@ -7,9 +7,7 @@ import { routes } from '@stricjs/app';
 import { text } from '@stricjs/app/send';
 
 // Export a main function to register routes
-export function main() {
-    return routes().get('/', () => text('Hi'));
-}
+export default routes().get('/', () => text('Hi'));
 ```
 
 ## Quick start
@@ -37,11 +35,9 @@ import { routes } from '@stricjs/app';
 import { text, json } from '@stricjs/app/send';
 
 // Export a main function to register routes
-export function main() {
-    return routes()
-        .get('/', () => text('Hi'))
-        .post('/json', c => c.json().then(json));
-}
+export default routes()
+    .get('/', () => text('Hi'))
+    .post('/json', c => c.json().then(json));
 ```
 
 The `main` function will be called at runtime and routes will automatically be registered.
