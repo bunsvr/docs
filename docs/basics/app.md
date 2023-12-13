@@ -294,7 +294,7 @@ export default ws.route<{ id: string }>({
 ```
 
 Then you can use it in your routes file.
-```
+```ts
 import ping from './ping.ws';
 
 export default routes()
