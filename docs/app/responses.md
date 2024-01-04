@@ -52,6 +52,7 @@ source({
 ```
 
 ## SSE
+Handle server-sent events with Bun direct `ReadableStream`.
 ```ts
 import { events } from '@stricjs/app/stream';
 

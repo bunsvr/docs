@@ -2,7 +2,7 @@
 `@stricjs/app` is the main component to build web applications.
 
 Install using Bun:
-```ts
+```bash
 bun add @stricjs/app
 ```
 
