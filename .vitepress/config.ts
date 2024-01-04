@@ -32,12 +32,16 @@ export default defineConfig({
         link: '/docs/performance'
       },
       {
-        text: 'Basics',
-        link: '/docs/basics/main',
+        text: 'App',
+        link: '/docs/app/index',
         items: [
           {
-            text: 'App',
-            link: '/docs/basics/app'
+            text: 'Routes',
+            link: '/docs/app/routes'
+          },
+          {
+            text: 'Responses',
+            link: '/docs/app/responses'
           }
         ]
       }

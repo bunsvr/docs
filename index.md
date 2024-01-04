@@ -25,7 +25,7 @@ features:
   - title: Simple
     details: APIs are designed to be fast, simple and maximize customizability.
   - title: Lightweight
-    details: Every package is under 50kB in size and requires no external dependencies 
+    details: Every package is under 50kB in size and often requires no dependencies. 
 ---
 
 <style>

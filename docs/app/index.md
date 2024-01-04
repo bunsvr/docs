@@ -1,0 +1,17 @@
+# Getting started
+`@stricjs/app` is the main component to build web applications.
+
+Install using Bun:
+```ts
+bun add @stricjs/app
+```
+
+In your entry point, import and run the `init` function with a set of configs.
+```ts
+import { init } from '@stricjs/app';
+
+init({
+    // Directories that routes are located
+    routes: ['./src']
+});
+```
