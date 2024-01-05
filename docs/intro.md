@@ -37,7 +37,7 @@ import { text, json } from '@stricjs/app/send';
 // Export a main function to register routes
 export default routes()
     .get('/', () => text('Hi'))
-    .post('/json', c => c.json().then(json));
+    .post('/json', ctx => ctx.json().then(json));
 ```
 The routes records exported will be automatically registered at runtime
 

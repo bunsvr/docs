@@ -67,30 +67,30 @@ the `Response` object directly.
 
 ```ts
 const f0 = evs.send(); // Create a function that returns a `Response` object
-f0(c); // Accept a context as an argument
+f0(ctx); // Accept a context as an argument
 
 const f1 = evs.stream(); // Create a function that returns a `ReadableStream`
-f1(c); // Accept a context as an argument
+f1(ctx); // Accept a context as an argument
 ```
 
 ## Send context as response
 You can set response info like `status` and `headers` as properties of
 the request context and send using `ctx`.
 ```ts
-import { ctx } from '@stricjs/app/send';
+import send from '@stricjs/app/send';
 import { routes } from '@stricjs/app';
 
-return routes().get('/text', c => {
+return routes().get('/text', ctx => {
     // Set `ResponseInit` properties
-    c.status = 200;
-    c.headers['Content-Type'] = 'text/plain';
-    c.statusText = 'OK';
+    ctx.status = 200;
+    ctx.headers['Content-Type'] = 'text/plain';
+    ctx.statusText = 'OK';
 
     // Set response body
-    c.body = 'Hi';
+    ctx.body = 'Hi';
 
     // Send all info
-    return ctx(c);
+    return send.ctx(ctx);
 });
 ```
 

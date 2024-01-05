@@ -19,7 +19,7 @@ export default defineConfig({
       { text: 'Examples', link: '//github.com/bunsvr/examples' }
     ],
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
+      { icon: 'github', link: '//github.com/bunsvr' }
     ],
     logo: '/logo.svg',
     sidebar: [
