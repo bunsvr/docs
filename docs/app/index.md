@@ -1,3 +1,12 @@
+---
+prev:
+  text: 'Performance'
+  link: '/docs/performance'
+next:
+  text: 'Routes'
+  link: '/docs/app/routes'
+---
+
 # Getting started
 `@stricjs/app` is the main component to build web applications.
 
@@ -15,12 +24,3 @@ init({
     routes: ['./src']
 });
 ```
-
----
-prev:
-  text: 'Performance'
-  link: '/docs/performance'
-next:
-  text: 'Routes'
-  link: '/docs/app/routes'
----
