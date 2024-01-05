@@ -10,45 +10,32 @@ import {
 
 import { source } from '@stricjs/app/stream';
 
-text('Hi'); 
 // Send any data that can be directly wrapped with `Response` constructor
-// new Response('Hi')
+text('Hi'); // new Response('Hi') 
 
-json({ foo: 'bar' }); 
 // Send a JSON object
-// new Response(JSON.stringify({ foo: 'bar' }), { headers: { 'Content-Type': 'application/json' } })
-
-html('<p>Hi</p>');
+json({ foo: 'bar' }); // new Response(JSON.stringify({ foo: 'bar' }), { headers: { 'Content-Type': 'application/json' } })
+ 
 // Send HTML format
-// new Response('<p>Hi</p>', { headers: { 'Content-Type': 'text/html' } })
+html('<p>Hi</p>'); // new Response('<p>Hi</p>', { headers: { 'Content-Type': 'text/html' } })
 
-file('./page.html');
 // Stream a file using `Bun.file`
-// new Response(Bun.file('./page.html'))
+file('./page.html'); // new Response(Bun.file('./page.html'))
 
-head({ 
-    status: 404
-});
 // Send only response options
-// new Response(null, { status: 404 });
+head({ status: 404 }); // new Response(null, { status: 404 });
 
-redirect('/nav', 307);
 // Redirect to an URL (status should be `301`, `302`, `307` or `308`)
-// new Response(null, { status: 307, headers: { Location: '/nav' } })
+redirect('/nav', 307); // new Response(null, { status: 307, headers: { Location: '/nav' } })
 
-status(404);
 // Send an empty response with only status code
-// new Response(null, { status: 404 });
+status(404); // new Response(null, { status: 404 });
 
-stat('Im a teapot', 418);
 // Send any data that can be wrapped with `Response` constructor with a status code
-// new Response('Im a teapot', { status: 418 });
+stat('Im a teapot', 418); // new Response('Im a teapot', { status: 418 });
 
-source({
-    pull(c) {}
-})
 // Send a readable stream with the source
-// new Response(new ReadableStream({ pull(c) {} }))
+source({ pull(c) {} }); // new Response(new ReadableStream({ pull(c) {} }))
 ```
 
 ## SSE
@@ -82,9 +69,32 @@ the `Response` object directly.
 const f0 = evs.send(); // Create a function that returns a `Response` object
 f0(c); // Accept a context as an argument
 
-const f1 = evs.stream() // Create a function that returns a `ReadableStream`
+const f1 = evs.stream(); // Create a function that returns a `ReadableStream`
 f1(c); // Accept a context as an argument
 ```
+
+## Send context as response
+You can set response info like `status` and `headers` as properties of
+the request context and send using `ctx`.
+```ts
+import { ctx } from '@stricjs/app/send';
+import { routes } from '@stricjs/app';
+
+return routes().get('/text', c => {
+    // Set `ResponseInit` properties
+    c.status = 200;
+    c.headers['Content-Type'] = 'text/plain';
+    c.statusText = 'OK';
+
+    // Set response body
+    c.body = 'Hi';
+
+    // Send all info
+    return ctx(c);
+});
+```
+
+This will be useful later when we work with lifecycles.
 
 ## Micro optimization
 If you have to redirect to a specific location that does not depend on 

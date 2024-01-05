@@ -42,6 +42,10 @@ export default defineConfig({
           {
             text: 'Responses',
             link: '/docs/app/responses'
+          },
+          {
+            text: 'Lifecycles',
+            link: '/docs/app/lifecycles'
           }
         ]
       }
