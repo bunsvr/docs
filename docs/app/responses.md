@@ -99,12 +99,14 @@ This will be useful later when we work with lifecycles.
 ## Micro optimization
 If you have to redirect to a specific location that does not depend on 
 the context object, use the `createLink` utility.
-```
+```ts
 import { createLink } from '@stricjs/app/send';
 
 // Returns a function that returns a `Response` object
-const home = createLink('/', 307);
+const home = createLink('/nav', 307);
+
+home(); // redirect('/nav', 307)
 ```
 
 This cached the `ResponseInit` object so the handler doesn't create 
-a new object on every request.
+a new object on every request, unlike `redirect`.
