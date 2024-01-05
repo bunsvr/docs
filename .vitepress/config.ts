@@ -34,6 +34,8 @@ export default defineConfig({
       {
         text: 'App',
         link: '/docs/app/index',
+        collapsed: true,
+
         items: [
           {
             text: 'Routes',
@@ -46,6 +48,10 @@ export default defineConfig({
           {
             text: 'Lifecycles',
             link: '/docs/app/lifecycles'
+          },
+          {
+            text: 'Configurations',
+            link: '/docs/app/configs'
           }
         ]
       }

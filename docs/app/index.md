@@ -15,3 +15,12 @@ init({
     routes: ['./src']
 });
 ```
+
+---
+prev:
+  text: 'Performance'
+  link: '/docs/performance'
+next:
+  text: 'Routes'
+  link: '/docs/app/routes'
+---
