@@ -24,12 +24,12 @@ Change the content of `index.ts` to:
 ```ts
 import { init } from '@stricjs/app';
 
+// Shorter way to build and serve the app
 init({ routes: ['./src'] });
 ```
 
 Create a routes file in the `src` directory with extension `.routes.ts`.
 
-Export a `main` function that returns a routes record.
 ```ts
 import { routes } from '@stricjs/app';
 import { text, json } from '@stricjs/app/send';
@@ -39,8 +39,7 @@ export default routes()
     .get('/', () => text('Hi'))
     .post('/json', c => c.json().then(json));
 ```
-
-The `main` function will be called at runtime and routes will automatically be registered.
+The routes records exported will be automatically registered at runtime
 
 To start the application, simply run:
 ```bash
