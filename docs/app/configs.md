@@ -52,3 +52,9 @@ export default config.base('/api', {
     // Add configs like guards, layers, wraps and reject
 });
 ```
+
+If you don't have any specified prefix, you can use 
+`config.fn` for handlers type safety.
+```ts
+export const guards = config.fn(f7, f8, f9);
+```
