@@ -41,3 +41,18 @@ routes()
 ```
 
 So the sequence of execution is `f0`, `f1`, `f2`, `f6`, `f7`.
+
+Normally the result of all function is validated. If you don't want to some 
+function results to get validated, use the `layer` method.
+```ts
+import { layer } from '@stricjs/app';
+
+layer(f8); // Returns a handler
+```
+
+If you want to add a sequence of layers (or more type-safe context object), use the `layer` 
+method from the routes record object.
+```ts
+routes()
+    .layer(f9, f10, f11);
+```
