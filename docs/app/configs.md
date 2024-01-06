@@ -29,7 +29,7 @@ export const prefix = '/api';
 
 ## Handlers
 The config file provides a way for each type of function to be added.
-```
+```ts
 // Prepend guards
 export const guards = [f0, f1];
 
