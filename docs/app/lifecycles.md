@@ -4,7 +4,6 @@ that was registered to that route.
 
 The handlers are executed in sequence and the result of the last 
 one is returned as a response.
-
 ```ts
 routes()
     .get('/', f0, f1, f2);
@@ -12,7 +11,6 @@ routes()
 
 If any of the handler before the last one returns `null`, the fallback 
 handler result will be returned.
-
 ```ts
 routes()
     .get('/', f0, f1, f2);
@@ -47,7 +45,8 @@ function results to get validated, use the `layer` method.
 ```ts
 import { layer } from '@stricjs/app';
 
-layer(f8); // Returns a handler
+// Returns a guard function
+layer(f8);
 ```
 
 If you want to add a sequence of layers (or more type-safe context object), use the `layer` 
