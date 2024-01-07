@@ -39,7 +39,7 @@ parser.jsonv(body => {
 });
 ```
 
-Here is an example using my own validator library, `vld-ts`.
+Here is an example using my own validator library, [`vld-ts`](//npmjs.com/package/vld-ts).
 ```ts
 import { t, vld } from 'vld-ts';
 
