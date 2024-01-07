@@ -52,6 +52,10 @@ export default defineConfig({
           {
             text: 'Configurations',
             link: '/docs/app/configs'
+          },
+          {
+            text: 'Validation',
+            link: '/docs/app/validation'
           }
         ]
       }
