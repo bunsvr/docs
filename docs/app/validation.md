@@ -6,7 +6,7 @@ routes()
         // return null or something else
     });
 ```
-The state acts like a guard function, but if the return result is not `null`, `c.state` is set to that value.
+The state acts like a guard function, but if the return result is not `null`, `ctx.state` is set to that value.
 
 You can add multiple states to `c.state`.
 ```ts
@@ -35,7 +35,7 @@ parser.json(body => {
 
 parser.jsonv(body => {
     // Return true if the body is valid, false otherwise
-    // The function type should be inferred correctly for the `c.state` type to work
+    // The function type should be inferred correctly for the `ctx.state` type to work
 });
 ```
 
@@ -43,15 +43,16 @@ Here is an example using my own validator library, `vld-ts`.
 ```ts
 import { t, vld } from 'vld-ts';
 
-// Return type: obj is { id: string, name: string, age: number }
-const isUser = vld(
-    t.obj({
-        id: t.str,
-        name: t.str,
-        age: t.num
-    })
-);
+// Create a schema
+const User = t.obj({
+    id: t.str,
+    name: t.str,
+    age: t.num
+});
 
 routes()
-    .state(jsonv(isUser));
+    .state(jsonv(
+        // Return type: obj is { id: string, name: string, age: number }
+        vld(User)
+    ));
 ```
