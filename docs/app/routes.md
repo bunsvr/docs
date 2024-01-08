@@ -37,3 +37,22 @@ The context object includes parsed data after route matching.
 
 The [`Context`](//github.com/aquapi/wint/blob/main/src/framework/types.ts) interface is declared in Wint framework API types.
 
+## Route patterns
+Wildcards and URL parameters are supported.
+```ts
+routes()
+    // Match `/path/${id}`
+    .get('/user/:id', c => {
+        // Get the URL parameter value
+        c.params.id;
+    })
+    // Match every path that starts with `/`
+    .get('/*', c => {
+        // Get the rest of the URL after `/`.
+        // Does not start with a slash
+        c.params['*'];
+    });
+```
+
+These patterns match slower than static route patterns and should only 
+be used when needed. Consider using query parameters if possible.
