@@ -43,6 +43,8 @@ export const wraps = [f4, f5];
 export const reject = f6;
 ```
 
+Note that layer handlers are registered after guard handlers.
+
 Or if you want type safety for path.
 ```ts
 import { config } from '@stricjs/app';
