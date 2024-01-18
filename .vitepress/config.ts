@@ -34,7 +34,6 @@ export default defineConfig({
       {
         text: 'App',
         link: '/docs/app/index',
-        collapsed: true,
 
         items: [
           {
@@ -56,6 +55,17 @@ export default defineConfig({
           {
             text: 'Validation',
             link: '/docs/app/validation'
+          }
+        ]
+      },
+      {
+        text: 'Utils',
+        link: '/docs/utils/index',
+
+        items: [
+          {
+            text: 'CORS',
+            link: '/docs/utils/cors'
           }
         ]
       }

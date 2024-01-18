@@ -8,8 +8,9 @@ In this file, exports a routes object that stores route records.
 import { routes } from '@stricjs/app';
 import { text } from '@stricjs/app/send';
 
+// This is automatically registered
 export default routes()
-    .get('/', () => text('Hi'));
+    .get('/', () => new Response('Hi'));
 ```
 
 The `routes.get` method stores a handler that only runs when 
@@ -42,17 +43,27 @@ Wildcards and URL parameters are supported.
 ```ts
 routes()
     // Match `/path/${id}`
-    .get('/user/:id', c => {
+    .get('/user/:id', ctx => {
         // Get the URL parameter value
-        c.params.id;
+        ctx.params.id;
     })
     // Match every path that starts with `/`
-    .get('/*', c => {
+    .get('/*', ctx => {
         // Get the rest of the URL after `/`.
         // Does not start with a slash
-        c.params['*'];
+        ctx.params['*'];
     });
 ```
 
 These patterns match slower than static route patterns and should only 
 be used when needed. Consider using query parameters if possible.
+
+## Plugins
+Plugins are designed for modifying the route records easier with external code.
+```ts
+routes.use(plugin);
+// Registering multiple plugins without type safety
+routes.plug(p1, p2, p3);
+```
+
+A plugin is an object with a `plugin` method, which takes in the route records object and yield it back with changes (for type safety).

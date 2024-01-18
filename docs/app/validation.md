@@ -4,6 +4,10 @@ You can do request validations using route states.
 routes()
     .state(ctx => {
         // return null or something else
+    })
+    .get('/', c => {
+        // Use parsed value here
+        c.state;
     });
 ```
 The state acts like a guard function, but if the return result is not `null`, `ctx.state` is set to that value.
@@ -22,12 +26,13 @@ routes()
     });
 ```
 
+If `state` is called multiple times, single state will override the previous state and multiple states will be merged.
+
 ## Parsers
-A shorter way to write states.
+A shorter way to write states. All parsers return a guard function.
 ```ts
 import parser from '@stricjs/app/parser';
 
-// Return a guard function
 parser.json(body => { 
     // Do something with parsed request body as JSON 
     // Return the body or null
@@ -37,6 +42,11 @@ parser.jsonv(body => {
     // Return true if the body is valid, false otherwise
     // The function type should be inferred correctly for the `ctx.state` type to work
 });
+
+parser.text; // Parse body as text
+parser.form; // Parse body as FormData
+parser.buffer; // Parse body as ArrayBuffer
+parser.blob; // Parse body as Blob
 ```
 
 Here is an example using my own validator library, [`vld-ts`](//npmjs.com/package/vld-ts).

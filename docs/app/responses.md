@@ -77,10 +77,9 @@ f1(ctx); // Accept a context as an argument
 You can set response info like `status` and `headers` as properties of
 the request context and send using `ctx`.
 ```ts
-import send from '@stricjs/app/send';
-import { routes } from '@stricjs/app';
+import * as send from '@stricjs/app/send';
 
-return routes().get('/text', ctx => {
+routes.get('/text', ctx => {
     // Set `ResponseInit` properties
     ctx.status = 200;
     ctx.headers['Content-Type'] = 'text/plain';
@@ -95,6 +94,13 @@ return routes().get('/text', ctx => {
 ```
 
 This will be useful later when we work with lifecycles.
+
+You can register a plugin to automatically send the response.
+```ts
+routes.use(send.plug);
+```
+
+This plugin does overwrite the fallback so you will need to set the response info before returning `null`.
 
 ## Micro optimization
 If you have to redirect to a specific location that does not depend on 
