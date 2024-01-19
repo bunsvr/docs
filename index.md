@@ -8,7 +8,7 @@ hero:
   name: "Stric"
   text: "Fast, simple, scalable apps"
   tagline: "A Bun-first framework for building web APIs"
-  image: "/code.png"
+  image: "/code.svg"
   actions:
     - theme: brand
       text: View Docs
