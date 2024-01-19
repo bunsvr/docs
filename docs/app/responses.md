@@ -1,9 +1,7 @@
 # Sending Responses
-
-Stricjs simplifies the process of sending different types of responses in your web application. Here's an overview of the various methods available for sending responses.
+Stric simplifies the process of sending different types of responses in your web application. Here's an overview of the various methods available for sending responses.
 
 ## Basic Response Formats
-
 Stricjs offers several shorthand functions for sending common response types:
 
 ```ts
@@ -14,7 +12,6 @@ import {
 ```
 
 ### Examples:
-
 - **Text Response**: `text('Hi')` sends a plain text response.
 - **JSON Response**: `json({ foo: 'bar' })` sends a JSON response.
 - **HTML Response**: `html('<p>Hi</p>')` sends an HTML response.
@@ -25,9 +22,7 @@ import {
 - **Status with Data**: `stat('I'm a teapot', 418)` sends data with a status code.
 
 ## Server-Sent Events (SSE)
-
 Handle SSE using `events` from `@stricjs/app/stream`:
-
 ```ts
 import { events } from '@stricjs/app/stream';
 
@@ -48,9 +43,7 @@ const streamFunc = evs.stream();
 - **Usage**: The `send` function returns a `Response` object, while `stream` returns a `ReadableStream`.
 
 ## Context as Response
-
 You can set response properties directly in the request context and use `send.ctx`:
-
 ```ts
 import * as send from '@stricjs/app/send';
 
@@ -68,9 +61,7 @@ routes.get('/text', ctx => {
 - **Plugin**: Use `send.plug` to automatically send the response based on the context.
 
 ## Micro Optimization
-
 For static redirects, `createLink` caches the `ResponseInit` object for efficiency:
-
 ```ts
 import { createLink } from '@stricjs/app/send';
 

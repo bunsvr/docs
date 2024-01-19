@@ -1,13 +1,10 @@
 # Request Validation
-
-Stricjs facilitates request validation by leveraging route states. These states can act as guard functions, validating requests and setting context state accordingly.
+Stric facilitates request validation by leveraging route states. These states can act as guard functions, validating requests and setting context state accordingly.
 
 ## Using State for Validation
 
 ### Basic Validation
-
 A single state function can validate requests and set `ctx.state`.
-
 ```ts
 routes()
     .state(ctx => {
@@ -20,9 +17,7 @@ routes()
 ```
 
 ### Multiple States
-
 You can validate and set multiple states.
-
 ```ts
 routes()
     .state({
@@ -39,12 +34,10 @@ routes()
 - **Merging States**: If `state` is called multiple times, single states override previous ones while multiple states get merged.
 
 ## Parsers as Shortcuts for States
-
-Stricjs provides parsers as a concise way to define state validations.
+Stric provides parsers as a concise way to define state validations.
 
 ### Examples of Parsers
-
-- **JSON Parser**: `parser.json(body => { /* validate JSON body */ })`
+- **JSON Parser**: `parser.json(body => { /* validate JSON body and returns the body or null */ })`
 - **JSON Validator**: `parser.jsonv(body => { /* validate and return true or false */ })`
 - **Text Parser**: `parser.text`
 - **Form Parser**: `parser.form`
@@ -52,23 +45,22 @@ Stricjs provides parsers as a concise way to define state validations.
 - **Blob Parser**: `parser.blob`
 
 ### Using Parsers with Validation Libraries
-
 Here's an example using the [`vld-ts`](//npmjs.com/package/vld-ts) validation library:
 
 ```ts
 import { t, vld } from 'vld-ts';
-import parser from '@stricjs/app/parser';
+import * as parser from '@stricjs/app/parser';
 
 // Define a schema
 const User = t.obj({
     id: t.str,
     name: t.str,
-    age: t.num
-});
+    'age?': t.num
+}), isUser = vld(User);
 
 // Use parser with validation
 routes()
-    .state(parser.jsonv(vld(User)));
+    .state(parser.jsonv(isUser));
 ```
 
 - **Validation Logic**: The parser combined with the validator checks if the request body conforms to the `User` schema.
