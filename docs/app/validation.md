@@ -1,68 +1,76 @@
-# Validation
-You can do request validations using route states.
+# Request Validation
+
+Stricjs facilitates request validation by leveraging route states. These states can act as guard functions, validating requests and setting context state accordingly.
+
+## Using State for Validation
+
+### Basic Validation
+
+A single state function can validate requests and set `ctx.state`.
+
 ```ts
 routes()
     .state(ctx => {
-        // return null or something else
+        // Perform validation
+        // Return null or a value to set ctx.state
     })
-    .get('/', c => {
-        // Use parsed value here
-        c.state;
+    .get('/', ctx => {
+        // Access ctx.state
     });
 ```
-The state acts like a guard function, but if the return result is not `null`, `ctx.state` is set to that value.
 
-You can add multiple states to `c.state`.
+### Multiple States
+
+You can validate and set multiple states.
+
 ```ts
 routes()
     .state({
-        id: ctx => { /* Check ID */ },
-        query: ctx => { /* Check query */ }
+        id: ctx => { /* Validate and return ID */ },
+        query: ctx => { /* Validate and return query */ }
     })
     .get('/', ctx => {
-        // Use the value here
+        // Access states
         ctx.state.id;
         ctx.state.query;
     });
 ```
 
-If `state` is called multiple times, single state will override the previous state and multiple states will be merged.
+- **Merging States**: If `state` is called multiple times, single states override previous ones while multiple states get merged.
 
-## Parsers
-A shorter way to write states. All parsers return a guard function.
-```ts
-import parser from '@stricjs/app/parser';
+## Parsers as Shortcuts for States
 
-parser.json(body => { 
-    // Do something with parsed request body as JSON 
-    // Return the body or null
-});
+Stricjs provides parsers as a concise way to define state validations.
 
-parser.jsonv(body => {
-    // Return true if the body is valid, false otherwise
-    // The function type should be inferred correctly for the `ctx.state` type to work
-});
+### Examples of Parsers
 
-parser.text; // Parse body as text
-parser.form; // Parse body as FormData
-parser.buffer; // Parse body as ArrayBuffer
-parser.blob; // Parse body as Blob
-```
+- **JSON Parser**: `parser.json(body => { /* validate JSON body */ })`
+- **JSON Validator**: `parser.jsonv(body => { /* validate and return true or false */ })`
+- **Text Parser**: `parser.text`
+- **Form Parser**: `parser.form`
+- **Buffer Parser**: `parser.buffer`
+- **Blob Parser**: `parser.blob`
 
-Here is an example using my own validator library, [`vld-ts`](//npmjs.com/package/vld-ts).
+### Using Parsers with Validation Libraries
+
+Here's an example using the `vld-ts` validation library:
+
 ```ts
 import { t, vld } from 'vld-ts';
+import parser from '@stricjs/app/parser';
 
-// Create a schema
+// Define a schema
 const User = t.obj({
     id: t.str,
     name: t.str,
     age: t.num
 });
 
+// Use parser with validation
 routes()
-    .state(jsonv(
-        // Return type: obj is { id: string, name: string, age: number }
-        vld(User)
-    ));
+    .state(parser.jsonv(vld(User)));
 ```
+
+- **Validation Logic**: The parser combined with the validator checks if the request body conforms to the `User` schema.
+
+By integrating these validation techniques, Stricjs allows you to ensure that incoming requests meet your application's requirements, enhancing both security and data integrity.

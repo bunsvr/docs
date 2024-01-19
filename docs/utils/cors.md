@@ -1,43 +1,61 @@
-# CORS
-CORS handling can be done easily with `@stricjs/utils`.
+# Handling CORS
+
+The `@stricjs/utils` package simplifies Cross-Origin Resource Sharing (CORS) handling in web applications. Here's how you can use the `CORS` class for effective CORS management.
+
+## Basic Setup
+
+First, import and configure the `CORS` class:
+
 ```ts
 import { CORS } from '@stricjs/utils';
 
 const cors = new CORS({
-    // Camel case 
+    // Define allowed methods (as a string for single method)
     allowMethods: 'GET',
 
-    // Can be a boolean
+    // Enable credentials
     allowCredentials: true,
 
-    // Or a string array for multiple values
+    // Specify allowed origins (array for multiple values)
     allowOrigins: ['http://localhost:8000', 'http://example.com'],
 
-    // This option only changes plugin behavior
+    // Append headers instead of overwriting (affects plugin behavior)
     appendHeaders: true
 });
-
-cors.static; // If the headers will not change at all (does not check multiple origins)
-cors.headers; // Parsed headers (Don't use this directly)
-
-cors.validate(headersObj, requestOrigin); // Validate request origin and set 'Access-Control-Allow-Origin'
-cors.set(ctx); // Set CORS headers to ctx.headers without overwriting other headers
-cors.write(ctx); // Works like set but it overwrites other headers
-cors.assign(headerObj); // Extends the header object with the current CORS object headers
 ```
 
-`Access-Control-Allow-Origin` is a dynamic header because normally it only accepts one single origin.
-To handle multiple origins we need a validation step.
+### Key Properties
 
-## Plugin
-`CORS` can also be used directly as a `@stricjs/app` routes plugin.
+- **`cors.static`**: Indicates if headers are static (not applicable for multiple origins).
+- **`cors.headers`**: The parsed CORS headers (not for direct use).
+
+### Methods
+
+- **`validate(headersObj, requestOrigin)`**: Validates the request origin and sets `Access-Control-Allow-Origin`.
+- **`set(ctx)`**: Sets CORS headers in `ctx.headers` without overwriting existing headers.
+- **`write(ctx)`**: Similar to `set`, but overwrites existing headers.
+- **`assign(headerObj)`**: Extends a header object with CORS headers.
+
+## Handling Multiple Origins
+
+`Access-Control-Allow-Origin` is dynamic, typically accepting a single origin. For multiple origins, `CORS` requires a validation step.
+
+## Using as a Plugin
+
+`CORS` integrates directly as a plugin with `@stricjs/app` routes.
+
 ```ts
 routes.use(cors);
 ```
 
-The above code does two things:
-- Add a layer handler that set the CORS header.
-- Register an `OPTIONS` handler at `/*`.
+This configuration automatically:
 
-By default the function used to set the CORS header is `write`, which will overwrite all headers.
-To only append the headers, set CORS option `appendHeaders` to `true` like above.
+- Adds a layer handler to set CORS headers.
+- Registers an `OPTIONS` handler at `/*`.
+
+### Header Behavior
+
+- By default, `CORS` uses the `write` method, overwriting all headers.
+- To append CORS headers instead, set `appendHeaders` to `true`.
+
+By leveraging the `CORS` class from `@stricjs/utils`, developers can efficiently manage CORS policies in their Stricjs applications, ensuring both flexibility and compliance with cross-origin resource sharing requirements.
