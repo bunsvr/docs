@@ -6,20 +6,20 @@ Stric facilitates request validation by leveraging route states. These states ca
 ### Basic Validation
 A single state function can validate requests and set `ctx.state`.
 ```ts
-routes()
+routes
     .state(ctx => {
         // Perform validation
         // Return null or a value to set ctx.state
     })
     .get('/', ctx => {
-        // Access ctx.state
+        ctx.state; // Access ctx.state with type hints
     });
 ```
 
 ### Multiple States
 You can validate and set multiple states.
 ```ts
-routes()
+routes
     .state({
         id: ctx => { /* Validate and return ID */ },
         query: ctx => { /* Validate and return query */ }
@@ -59,8 +59,7 @@ const User = t.obj({
 }), isUser = vld(User);
 
 // Use parser with validation
-routes()
-    .state(parser.jsonv(isUser));
+routes.state(parser.jsonv(isUser));
 ```
 
 - **Validation Logic**: The parser combined with the validator checks if the request body conforms to the `User` schema.
