@@ -64,4 +64,4 @@ routes.state(parser.jsonv(isUser));
 
 - **Validation Logic**: The parser combined with the validator checks if the request body conforms to the `User` schema.
 
-By integrating these validation techniques, Stricjs allows you to ensure that incoming requests meet your application's requirements, enhancing both security and data integrity.
+By integrating these validation techniques, Stric allows you to ensure that incoming requests meet your application's requirements, enhancing both security and data integrity.
