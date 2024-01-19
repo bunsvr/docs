@@ -1,69 +1,63 @@
-# Routes
-We need to add handling for different endpoints of the application.
+# Handling Routes
 
-First create a file that has extension `.routes.ts` or `.routes.js`.
+Stricjs simplifies the process of handling different endpoints in your web application. Here’s a guide on setting up and managing routes.
 
-In this file, exports a routes object that stores route records.
-```ts
-import { routes } from '@stricjs/app';
-import { text } from '@stricjs/app/send';
+## Setting Up Routes
 
-// This is automatically registered
-export default routes()
-    .get('/', () => new Response('Hi'));
-```
+1. **Create a Route File**: Make a new file with an extension `.routes.ts` (for TypeScript) or `.routes.js` (for JavaScript).
 
-The `routes.get` method stores a handler that only runs when 
-request method is `GET` and request path matches `/`.
+2. **Define Route Records**: In this file, export a routes object that contains your route definitions.
 
-Multiple methods are supported such as `POST`, `PUT`, `DELETE` and `PATCH`.
+   ```ts
+   import { routes } from '@stricjs/app';
 
-## Handler
-The request handler is a function that accepts one parameter 
-which is the current request context.
+   export default routes()
+       .get('/', () => new Response('Hi'));
+   ```
 
-When using all methods metioned above, you can add multiple 
-handlers, and the result of the last handler is returned, so the
-last handler should return a `Response` object.
+   - The `routes.get` method registers a handler for `GET` requests matching the `/` path.
+   - Stricjs supports various HTTP methods, including `POST`, `PUT`, `DELETE`, and `PATCH`.
 
-The value `null` can also be returned to force the handler to stop
-running all other handlers and call the fallback handler if provided.
+## Writing a Handler
 
-## Context
-The context object includes parsed data after route matching.
-- `path`: The parsed pathname. Note that this does not have the first slash character.
-- `params`: The request parameters.
-- `state`: This property is mainly used for passing data through validations.
+- **Functionality**: Handlers are functions that process incoming requests. They accept a single parameter, the current request context.
+- **Returning Responses**: The last handler in the chain should return a `Response` object. Returning `null` stops the execution of subsequent handlers and triggers the fallback handler, if any.
+
+## Understanding Context
+
+The context object, derived from the Wint framework, includes:
+
+- `path`: The parsed pathname (excludes the initial slash).
+- `params`: Request parameters.
+- `state`: Used for passing data through validations.
 - `req`: The original `Request` object.
 
-The [`Context`](//github.com/aquapi/wint/blob/main/src/framework/types.ts) interface is declared in Wint framework API types.
+Refer to the [`Context`](//github.com/aquapi/wint/blob/main/src/framework/types.ts) interface for more details.
 
-## Route patterns
-Wildcards and URL parameters are supported.
+## Route Patterns
+
+Stricjs supports both static and dynamic route patterns, including wildcards and URL parameters.
+
 ```ts
 routes()
-    // Match `/path/${id}`
     .get('/user/:id', ctx => {
-        // Get the URL parameter value
+        // Accessing URL parameter `id`
         ctx.params.id;
     })
-    // Match every path that starts with `/`
     .get('/*', ctx => {
-        // Get the rest of the URL after `/`.
-        // Does not start with a slash
+        // Accessing wildcard parameter
         ctx.params['*'];
     });
 ```
 
-These patterns match slower than static route patterns and should only 
-be used when needed. Consider using query parameters if possible.
+- **Performance Note**: Dynamic patterns (like wildcards and URL parameters) match slower than static ones. Use query parameters where possible for better performance.
 
-## Plugins
-Plugins are designed for modifying the route records easier with external code.
-```ts
-routes.use(plugin);
-// Registering multiple plugins without type safety
-routes.plug(p1, p2, p3);
-```
+## Utilizing Plugins
 
-A plugin is an object with a `plugin` method, which takes in the route records object and yield it back with changes (for type safety).
+Plugins offer an extensible way to modify route records.
+
+- **Basic Usage**: `routes.use(plugin);`
+- **Multiple Plugins**: Register multiple plugins using `routes.plug(p1, p2, p3);` (note that this lacks type safety).
+- **Plugin Structure**: A plugin is an object with a `plugin` method. It receives the route records object, modifies it, and returns the modified version, ensuring type safety.
+
+By following these guidelines, you can efficiently set up and manage routes in your Stricjs application, leveraging its flexible routing capabilities to build dynamic web applications.

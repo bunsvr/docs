@@ -1,118 +1,82 @@
-# Sending responses
-`@stricjs/app` provides some shorthand for sending responses.
+# Sending Responses
 
-## Basic format
+Stricjs simplifies the process of sending different types of responses in your web application. Here's an overview of the various methods available for sending responses.
+
+## Basic Response Formats
+
+Stricjs offers several shorthand functions for sending common response types:
+
 ```ts
 import {
     text, json, html, file,
     head, redirect, status, stat
 } from '@stricjs/app/send';
-
-import { source } from '@stricjs/app/stream';
-
-// Send any data that can be directly wrapped with `Response` constructor
-text('Hi'); // new Response('Hi') 
-
-// Send a JSON object
-json({ foo: 'bar' }); // new Response(JSON.stringify({ foo: 'bar' }), { headers: { 'Content-Type': 'application/json' } })
- 
-// Send HTML format
-html('<p>Hi</p>'); // new Response('<p>Hi</p>', { headers: { 'Content-Type': 'text/html' } })
-
-// Stream a file using `Bun.file`
-file('./page.html'); // new Response(Bun.file('./page.html'))
-
-// Send only response options
-head({ status: 404 }); // new Response(null, { status: 404 });
-
-// Redirect to an URL (status should be `301`, `302`, `307` or `308`)
-redirect('/nav', 307); // new Response(null, { status: 307, headers: { Location: '/nav' } })
-
-// Send an empty response with only status code
-status(404); // new Response(null, { status: 404 });
-
-// Send any data that can be wrapped with `Response` constructor with a status code
-stat('Im a teapot', 418); // new Response('Im a teapot', { status: 418 });
-
-// Send a readable stream with the source
-source({ pull(c) {} }); // new Response(new ReadableStream({ pull(c) {} }))
 ```
 
-## SSE
-Handle server-sent events with Bun direct `ReadableStream`.
+### Examples:
+
+- **Text Response**: `text('Hi')` sends a plain text response.
+- **JSON Response**: `json({ foo: 'bar' })` sends a JSON response.
+- **HTML Response**: `html('<p>Hi</p>')` sends an HTML response.
+- **File Stream**: `file('./page.html')` streams a file as the response.
+- **Headers Only**: `head({ status: 404 })` sends a response with headers only.
+- **Redirection**: `redirect('/nav', 307)` sends a redirect response.
+- **Status Only**: `status(404)` sends a response with only a status code.
+- **Status with Data**: `stat('I'm a teapot', 418)` sends data with a status code.
+
+## Server-Sent Events (SSE)
+
+Handle SSE using `events` from `@stricjs/app/stream`:
+
 ```ts
 import { events } from '@stricjs/app/stream';
 
-const evs = events(
-    (controller, ctx) => {
-        // Do something with the context and controller
-        // This function runs while the request signal is not aborted
-    }
-);
-
-evs.abort((controller, ctx) => {
-    // Runs after the request signal is aborted
+const evs = events((controller, ctx) => {
+    // Handle events
 });
 
-evs.cancel((controller, ctx) => {
-    // Runs when the `ReadableStream` is canceled
-});
+// Add abort and cancel handlers
+evs.abort((controller, ctx) => { /* ... */ });
+evs.cancel((controller, ctx) => { /* ... */ });
+
+// Obtain a Response object or ReadableStream
+const responseFunc = evs.send();
+const streamFunc = evs.stream();
 ```
 
-Note that all of this function call can be chained.
+- **Chaining**: All functions can be chained for better readability.
+- **Usage**: The `send` function returns a `Response` object, while `stream` returns a `ReadableStream`.
 
-After registering all necessary handlers, you can choose to obtain a
-function that only returns the `ReadableStream` or a function that returns
-the `Response` object directly.
+## Context as Response
 
-```ts
-const f0 = evs.send(); // Create a function that returns a `Response` object
-f0(ctx); // Accept a context as an argument
+You can set response properties directly in the request context and use `send.ctx`:
 
-const f1 = evs.stream(); // Create a function that returns a `ReadableStream`
-f1(ctx); // Accept a context as an argument
-```
-
-## Send context as response
-You can set response info like `status` and `headers` as properties of
-the request context and send using `ctx`.
 ```ts
 import * as send from '@stricjs/app/send';
 
 routes.get('/text', ctx => {
-    // Set `ResponseInit` properties
+    // Set response properties
     ctx.status = 200;
     ctx.headers['Content-Type'] = 'text/plain';
     ctx.statusText = 'OK';
-
-    // Set response body
     ctx.body = 'Hi';
 
-    // Send all info
     return send.ctx(ctx);
 });
 ```
 
-This will be useful later when we work with lifecycles.
+- **Plugin**: Use `send.plug` to automatically send the response based on the context.
 
-You can register a plugin to automatically send the response.
-```ts
-routes.use(send.plug);
-```
+## Micro Optimization
 
-This plugin does overwrite the fallback so you will need to set the response info before returning `null`.
+For static redirects, `createLink` caches the `ResponseInit` object for efficiency:
 
-## Micro optimization
-If you have to redirect to a specific location that does not depend on 
-the context object, use the `createLink` utility.
 ```ts
 import { createLink } from '@stricjs/app/send';
 
-// Returns a function that returns a `Response` object
 const home = createLink('/nav', 307);
-
-home(); // redirect('/nav', 307)
 ```
 
-This cached the `ResponseInit` object so the handler doesn't create 
-a new object on every request, unlike `redirect`.
+- **Efficiency**: This approach avoids creating a new object on each request, unlike the `redirect` function.
+
+By leveraging these methods, you can efficiently manage different types of responses in your Stricjs application, enhancing both the developer experience and application performance.
