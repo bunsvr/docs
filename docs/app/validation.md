@@ -53,7 +53,7 @@ Stricjs provides parsers as a concise way to define state validations.
 
 ### Using Parsers with Validation Libraries
 
-Here's an example using the `vld-ts` validation library:
+Here's an example using the [`vld-ts`](//npmjs.com/package/vld-ts) validation library:
 
 ```ts
 import { t, vld } from 'vld-ts';
