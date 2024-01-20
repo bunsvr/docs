@@ -33,7 +33,7 @@ export default defineConfig({
       },
       {
         text: 'App',
-        link: '/docs/app/index',
+        link: '/docs/app/',
 
         items: [
           {
@@ -60,7 +60,7 @@ export default defineConfig({
       },
       {
         text: 'Utils',
-        link: '/docs/utils/index',
+        link: '/docs/utils/',
 
         items: [
           {
