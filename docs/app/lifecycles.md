@@ -1,76 +1,38 @@
 # Managing Lifecycles
-Stric provides a flexible mechanism to handle the lifecycle of route handlers. 
-Understanding how to sequence, reject, guard, wrap, and layer these handlers is crucial for efficient route management.
+Stric provides a structured approach to handling the lifecycle of route handlers, offering functions like `guard`, `wrap`, `layer`, and HTTP method handlers like `get`. Understanding the order and purpose of these functions is crucial for building efficient and maintainable routes.
 
-## Handler Execution Sequence
-Handlers for a specific route are executed in the order they are registered. The result of the last handler is sent as the response.
+## Understanding Execution Order
+In Stric, the execution order of route-related functions is deterministic and follows a specific pattern. When `guard`, `layer`, `get` (or other HTTP methods), and `wrap` are used together, they are executed in the following order:
 
-### Example
+1. **Guards (`guard`)**: Functions added through `guard` are executed first. They are ideal for authentication, authorization, or any preliminary checks and data preprocessing needed before the main route handlers.
+
+2. **Layers (`layer`)**: Functions added through `layer` are executed immediately after guards. Layers are typically used for functionalities that should not affect the main processing flow, like logging or adding context information. Their outcomes do not undergo validation checks.
+
+3. **HTTP Method Handlers (`get`, `post`, `put`, etc.)**: These are the main route handlers. They handle the core logic for the route and are executed after all guards and layers.
+
+4. **Wrappers (`wrap`)**: Functions added through `wrap` are executed after the main route handlers. They are used for post-processing tasks like response formatting, logging, or cleanup operations.
+
+### Visual Representation of Execution Flow:
+```
+[Guard Functions] -> [Layer Functions] -> [HTTP Method Handlers] -> [Wrap Functions]
+```
+
+### Practical Example:
 ```ts
 routes()
-    .get('/', f0, f1, f2);
+    .guard(guard1, guard2)   // Executes first and second
+    .layer(layer1)           // Executes third
+    .get('/', handler1, handler2) // Executes fourth and fifth
+    .wrap(wrap1, wrap2);     // Executes sixth and seventh
 ```
 
-- Here, `f0`, `f1`, and `f2` are executed in sequence.
+## Detailed Explanation of Lifecycle Functions
+- **`guard` Functions**: Use `guard` for operations that need to run before the main handlers. If a guard returns `null`, subsequent handlers are skipped, and a fallback handler is invoked if defined.
 
-## Fallback with `reject`
-If any handler before the last one returns `null`, a fallback handler's result is used as the response.
+- **`layer` Functions**: Use `layer` for adding non-critical functionalities that should not interfere with the main route processing. They are similar to guards but their return values are not validated.
 
-### Example
-```ts
-routes()
-    .get('/', f0, f1, f2)
-    .reject(f3);
-```
+- **HTTP Method Handlers (`get`, `post`, etc.)**: Define the core logic of your route with these handlers. They process the incoming requests and generate responses.
 
-- If `f0` or `f1` returns `null`, `f3` is executed and its result is used.
-- Note: If `f2` (the final handler) returns `null`, that value is used as the response.
+- **`wrap` Functions**: Use `wrap` for operations that should run after the main handlers. They are ideal for post-processing, like modifying the response or performing cleanup tasks.
 
-## Prepending Handlers with `guard`
-You can prepend handlers to be executed before the main handlers of a route.
-
-### Example
-```ts
-routes()
-    .guard(f4, f5)
-    .get('/', f0, f1, f2);
-```
-
-- The execution sequence will be `f4`, `f5`, `f0`, `f1`, `f2`.
-
-## Appending Handlers with `wrap`
-Handlers can also be appended to execute after the main handlers.
-
-### Example
-```ts
-routes()
-    .wrap(f6, f7)
-    .get('/', f0, f1, f2);
-```
-
-- The execution sequence will be `f0`, `f1`, `f2`, `f6`, `f7`.
-
-## Bypassing Validation with `layer`
-To bypass the validation of certain function results, use `layer`.
-
-### Example
-```ts
-import { layer } from '@stricjs/app';
-
-const guardedFunction = layer(f8);
-```
-
-- `guardedFunction` can now be used without its result being validated.
-
-## Sequencing Layers
-For adding a sequence of layers or for more type-safe context objects, use the `layer` method from the route records object.
-
-### Example
-```ts
-routes()
-    .layer(f9, f10, f11);
-```
-
-- This allows for a sequence of layered functions or more complex context handling.
-
-By utilizing these lifecycle management features, Stric enables a more controlled and flexible routing mechanism, allowing for complex routing scenarios to be handled with ease.
+By understanding and utilizing these lifecycle management functions, developers can create well-structured and efficient routing mechanisms, ensuring that each part of the request processing pipeline is clearly defined and executed in an organized manner.
