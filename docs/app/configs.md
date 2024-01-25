@@ -5,7 +5,7 @@ Stric offers a comprehensive and flexible approach to configuring route behavior
 ## Directory Structure and Configuration Files
 
 ### Creating a Configuration File
-Stric requires a `config.ts` configuration file in each directory that contains routes, detailing the behavior and structure of these routes. Should you prefer JavaScript or a different file name, you must explicitly adjust the `app.options.config` setting:
+Stric requires a `config.ts` configuration file in each directory that contains routes, detailing the behavior and structure of these routes. If you prefer JavaScript or a different file name, you must explicitly adjust the `app.options.config` setting:
 
 ```ts
 init({
