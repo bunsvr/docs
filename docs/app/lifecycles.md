@@ -6,7 +6,7 @@ In Stric, the execution order of route-related functions is deterministic and fo
 
 1. **Guards (`guard`)**: Functions added through `guard` are executed first. They are ideal for authentication, authorization, or any preliminary checks and data preprocessing needed before the main route handlers.
 
-2. **Layers (`layer`)**: Functions added through `layer` are executed immediately after guards. Layers are typically used for functionalities that should not affect the main processing flow, like logging or adding context information. Their outcomes do not undergo validation checks.
+2. **Layers (`layer`)**: Layers are a special type of guard function. They are typically used for functionalities that should not affect the main processing flow, like logging or adding context information. Their outcomes do not undergo validation checks, unlike guards.
 
 3. **HTTP Method Handlers (`get`, `post`, `put`, etc.)**: These are the main route handlers. They handle the core logic for the route and are executed after all guards and layers.
 
