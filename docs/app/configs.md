@@ -1,74 +1,81 @@
 # Configuring Routes
-Stric allows you to configure route behaviors and structures, including base paths, guards, wrappers, and more. Here's how to set up and use these configurations effectively.
 
-## Setting Up Configuration Files
-1. **Create a Configuration File**: Typically named `base.ts` (or `.js` for JavaScript), this file resides in the directory you wish to configure.
-2. **Customize Config File Name**: If you prefer a different file name, specify it in the `config` property of the entry point configuration.
+Stric offers a comprehensive and flexible approach to configuring route behaviors in your application. This includes setting base paths, employing guards, utilizing wrappers, and defining fallbacks, which collectively ensure a structured and easily manageable routing setup. This document delves into both the foundational and advanced aspects of route configuration within Stric, covering everything from directory structure and configuration files to employing advanced configuration utilities for enhanced clarity and type safety.
 
-   ```ts
-   init({
-       routes: [/* route directories */],
-       config: 'customConfig.js' // Custom file name
-   });
-   ```
+## Directory Structure and Configuration Files
 
-## Configuring Options
-You can either use named exports or group configurations into a default export.
+### Creating a Configuration File
+Stric requires a `config.ts` configuration file in each directory that contains routes, detailing the behavior and structure of these routes. If you prefer JavaScript or a different file name, you must explicitly adjust the `app.options.config` setting:
 
-### Examples:
-- **Named Export**: 
-  ```ts
-  export const prefix = '/api';
-  ```
-- **Default Export**:
-  ```ts
-  export default { prefix: '/api' };
-  ```
+```ts
+init({
+    routes: [/* route directories */],
+    config: 'customConfig.js' // Custom file name
+});
+```
 
-### Using Type-Safe Wrappers
-Stric provides type-safe wrappers for easier configuration management.
+### Configuration Mechanism
+Stric recursively scans your project's directory tree, starting from a specified root directory. It searches for a `config.ts` file in each directory to determine the route configurations within. These configuration files can specify their settings through named exports or a default export.
 
-#### Prefix
-Set a base path for all route paths with the `prefix` option.
+## Basic Configuration Options
+
+The following options can be configured in your `config.ts` file to dictate the behavior of routes:
+
+- **Prefix**: Establishes a base path for all routes within the directory. With `autoprefix` enabled, specifying a prefix here is disallowed and will result in an error.
+
 ```ts
 export const prefix = '/api';
 ```
 
-#### Handlers
-Configure different types of functions for route handling.
+- **Guards**: An array of guard functions for preliminary checks like authentication.
 
 ```ts
-// Guards
-export const guards = [f0, f1];
-
-// Layers
-export const layers = [f2, f3];
-
-// Wrappers
-export const wraps = [f4, f5];
-
-// Fallback function
-export const reject = f6;
+export const guards = [authGuard, logGuard];
 ```
 
-- **Order of Registration**: Layer handlers are registered after guard handlers.
+- **Layers**: Middleware-like functionality applied across routes.
 
-#### Path-Specific Type Safety
-For type safety specific to paths, use `config.base`.
+```ts
+export const layers = [formParser, dataSanitizer];
+```
+
+- **Wraps**: Functions that envelop route handlers, adding common functionality.
+
+```ts
+export const wraps = [responseWrapper];
+```
+
+- **Fallback (reject)**: A fallback function for unmatched routes or handler errors.
+
+```ts
+export const reject = notFoundHandler;
+```
+
+## Advanced Configuration with `config.base` and `config.fn`
+
+For more nuanced and type-safe configurations, Stric introduces `config.base` and `config.fn` utilities:
+
+- **`config.base`**: Enables path-specific configurations, linking them directly to a base path for clearer association and readability.
 
 ```ts
 import { config } from '@stricjs/app';
 
 export default config.base('/api', {
-    // Other configurations like guards, layers, wraps, and reject
+    guards: [authGuard],
+    layers: [jsonParser],
+    wraps: [responseWrapper],
+    reject: notFoundHandler
 });
 ```
 
-#### Handler Configuration Without Prefix
-If no specific prefix path is needed, use `config.fn` for type-safe handler configuration.
+- **`config.fn`**: Simplifies handler configurations, focusing on functionality rather than path association.
 
 ```ts
-export const guards = config.fn(f7, f8, f9);
+import { config } from '@stricjs/app';
+
+export const guards = config.fn(guard1, guard2);
 ```
 
-By following these guidelines, you can effectively configure various aspects of your routes in Stric, ensuring a structured, manageable, and type-safe routing setup for your web application.
+## Key Points
+
+The core purpose of configuring routes in Stric is to enhance the lifecycle of routes by applying guard, layer, wrap, and reject functions. This allows for a seamless integration of additional functionalities to routes, especially those under the same prefix, effectively managing authentication, middleware processes, wrapping functionalities, and error handling in a unified and scalable manner.
