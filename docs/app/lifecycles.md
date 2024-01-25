@@ -14,7 +14,7 @@ In Stric, the execution order of route-related functions is deterministic and fo
 
 ### Visual Representation of Execution Flow:
 ```
-[Guard Functions] -> [Layer Functions] -> [HTTP Method Handlers] -> [Wrap Functions]
+[Guard Functions] -> [HTTP Method Handlers] -> [Wrap Functions]
 ```
 
 ### Practical Example:
